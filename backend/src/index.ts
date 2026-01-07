@@ -2,9 +2,11 @@ import express from "express";
 
 const app : any = express()
 
+app.use(express.json());
+
 
 app.get('/', (req : any,res : any) => {
-    res.json('Gorge o curiso')
+    res.json('Gorge o curioso')
 })
 
 app.listen(8080, () => {
