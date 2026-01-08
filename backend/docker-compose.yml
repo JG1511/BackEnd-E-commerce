@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres
+    container_name: db_pfc
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER = postgres
+      - POSTGRES_PASSWORD = pfc123
+      - POSTGRES_DB = pfc
+    volumes:
+      - pgdata:/data/postgres
+
+volumes:
+  pgdata
