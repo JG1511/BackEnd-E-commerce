@@ -54,6 +54,8 @@ model Recomendacao {
 
   produto   Produto @relation(fields: [produtoId], references: [id_produto])
   produtoId String  
+
+  @@unique([produtoId,usuarioId])
 }
 
 model Lista_Favorito {
@@ -62,7 +64,9 @@ model Lista_Favorito {
   usuarioId   String  
 
   produto   Produto @relation(fields: [produtoId], references: [id_produto])
-  produtoId String  
+  produtoId String 
+
+  @@unique([produtoId,usuarioId])
 }
 
 model Carrinho {
@@ -84,6 +88,8 @@ model Item_Carrinho {
 
   quantidade     Int
   preco_unitario Decimal
+
+  @@unique([produtoId,carrinhoId])
 }
 
 model Compra {
@@ -105,7 +111,9 @@ model Item_Compra {
   compraId       String 
 
   produto   Produto @relation(fields: [produtoId], references: [id_produto])
-  produtoId String  
+  produtoId String 
+
+  @@unique([compraId,produtoId])
 }
 
 // model teste {
