@@ -70,7 +70,7 @@ model Carrinho {
   usuario      Usuario         @relation(fields: [usuarioId], references: [id_usuario])
   usuarioId    String          
   status       String
-  data_criacao DateTime
+  data_criacao DateTime @default(now())
   itemCarrinho Item_Carrinho[]
 }
 
@@ -91,7 +91,7 @@ model Compra {
   usuario   Usuario @relation(fields: [usuarioId], references: [id_usuario])
   usuarioId String  
 
-  data_compra     DateTime
+  data_compra     DateTime @default(now())
   total           Decimal
   status          String
   forma_pagamento String
@@ -107,3 +107,10 @@ model Item_Compra {
   produto   Produto @relation(fields: [produtoId], references: [id_produto])
   produtoId String  
 }
+
+// model teste {
+//   cpf String
+//   nome String
+
+//    @@id(name: "Teste",fields: [cpf,nome])
+// }
