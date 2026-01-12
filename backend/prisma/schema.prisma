@@ -12,3 +12,98 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Usuario {
+  id_usuario    String           @id @default(uuid())
+  nome          String
+  cpf           String           @unique
+  email         String           @unique
+  senha         String
+  recomendacao  Recomendacao[]
+  listaFavorito Lista_Favorito[]
+  carrinho      Carrinho[]
+  compra        Compra[]
+}
+
+model Produto {
+  id_produto    String           @id @default(uuid())
+  nome          String
+  descricao     String
+  preco         Decimal
+  cor           String
+  modelo        String
+  categoria     Categoria        @relation(fields: [categoriaID], references: [id_categoria])
+  categoriaID   Int              @unique
+  recomendacao  Recomendacao[]
+  listaFavorito Lista_Favorito[]
+  itemCarrinho  Item_Carrinho[]
+  itemCompra    Item_Compra[]
+}
+
+model Categoria {
+  id_categoria  Int       @id @default(autoincrement())
+  nomeCategoria String
+  descricao     String
+  produto       Produto[]
+}
+
+model Recomendacao {
+  id_recomendacao Int     @id @default(autoincrement())
+  usuario         Usuario @relation(fields: [usuarioId], references: [id_usuario])
+  usuarioId       String  @unique
+
+  produto   Produto @relation(fields: [produtoId], references: [id_produto])
+  produtoId String  @unique
+}
+
+model Lista_Favorito {
+  id_favorito Int     @id @default(autoincrement())
+  usuario     Usuario @relation(fields: [usuarioId], references: [id_usuario])
+  usuarioId   String  @unique
+
+  produto   Produto @relation(fields: [produtoId], references: [id_produto])
+  produtoId String  @unique
+}
+
+model Carrinho {
+  id_carrinho  String          @id @default(uuid())
+  usuario      Usuario         @relation(fields: [usuarioId], references: [id_usuario])
+  usuarioId    String          @unique
+  status       String
+  data_criacao DateTime
+  itemCarrinho Item_Carrinho[]
+}
+
+model Item_Carrinho {
+  id_item   Int     @id @default(autoincrement())
+  produto   Produto @relation(fields: [produtoId], references: [id_produto])
+  produtoId String  @unique
+
+  carrinho   Carrinho @relation(fields: [carrinhoId], references: [id_carrinho])
+  carrinhoId String   @unique
+
+  quantidade     Int
+  preco_unitario Decimal
+}
+
+model Compra {
+  id_compra String  @id @default(uuid())
+  usuario   Usuario @relation(fields: [usuarioId], references: [id_usuario])
+  usuarioId String  @unique
+
+  data_compra     DateTime
+  total           Decimal
+  status          String
+  forma_pagamento String
+
+  itemCompra Item_Compra[]
+}
+
+model Item_Compra {
+  id_item_compra Int    @id @default(autoincrement())
+  compra         Compra @relation(fields: [compraId], references: [id_compra])
+  compraId       String @unique
+
+  produto   Produto @relation(fields: [produtoId], references: [id_produto])
+  produtoId String  @unique
+}
