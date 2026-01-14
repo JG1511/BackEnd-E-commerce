@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -19,10 +13,10 @@ model Usuario {
   cpf           String           @unique
   email         String           @unique
   senha         String
-  recomendacao  Recomendacao[]
-  listaFavorito Lista_Favorito[]
   carrinho      Carrinho[]
   compra        Compra[]
+  listaFavorito Lista_Favorito[]
+  recomendacao  Recomendacao[]
 }
 
 model Produto {
@@ -32,12 +26,12 @@ model Produto {
   preco         Decimal
   cor           String
   modelo        String
-  categoria     Categoria        @relation(fields: [categoriaID], references: [id_categoria])
-  categoriaID   Int              
-  recomendacao  Recomendacao[]
-  listaFavorito Lista_Favorito[]
+  categoriaID   Int
   itemCarrinho  Item_Carrinho[]
   itemCompra    Item_Compra[]
+  listaFavorito Lista_Favorito[]
+  categoria     Categoria        @relation(fields: [categoriaID], references: [id_categoria])
+  recomendacao  Recomendacao[]
 }
 
 model Categoria {
@@ -49,76 +43,62 @@ model Categoria {
 
 model Recomendacao {
   id_recomendacao Int     @id @default(autoincrement())
+  usuarioId       String
+  produtoId       String
+  produto         Produto @relation(fields: [produtoId], references: [id_produto])
   usuario         Usuario @relation(fields: [usuarioId], references: [id_usuario])
-  usuarioId       String  
 
-  produto   Produto @relation(fields: [produtoId], references: [id_produto])
-  produtoId String  
-
-  @@unique([produtoId,usuarioId])
+  @@unique([produtoId, usuarioId])
 }
 
 model Lista_Favorito {
   id_favorito Int     @id @default(autoincrement())
+  usuarioId   String
+  produtoId   String
+  produto     Produto @relation(fields: [produtoId], references: [id_produto])
   usuario     Usuario @relation(fields: [usuarioId], references: [id_usuario])
-  usuarioId   String  
 
-  produto   Produto @relation(fields: [produtoId], references: [id_produto])
-  produtoId String 
-
-  @@unique([produtoId,usuarioId])
+  @@unique([produtoId, usuarioId])
 }
 
 model Carrinho {
   id_carrinho  String          @id @default(uuid())
-  usuario      Usuario         @relation(fields: [usuarioId], references: [id_usuario])
-  usuarioId    String          
+  usuarioId    String
   status       String
-  data_criacao DateTime @default(now())
+  data_criacao DateTime        @default(now())
+  usuario      Usuario         @relation(fields: [usuarioId], references: [id_usuario])
   itemCarrinho Item_Carrinho[]
 }
 
 model Item_Carrinho {
-  id_item   Int     @id @default(autoincrement())
-  produto   Produto @relation(fields: [produtoId], references: [id_produto])
-  produtoId String  
-
-  carrinho   Carrinho @relation(fields: [carrinhoId], references: [id_carrinho])
-  carrinhoId String   
-
+  id_item        Int      @id @default(autoincrement())
+  produtoId      String
+  carrinhoId     String
   quantidade     Int
   preco_unitario Decimal
+  carrinho       Carrinho @relation(fields: [carrinhoId], references: [id_carrinho])
+  produto        Produto  @relation(fields: [produtoId], references: [id_produto])
 
-  @@unique([produtoId,carrinhoId])
+  @@unique([produtoId, carrinhoId])
 }
 
 model Compra {
-  id_compra String  @id @default(uuid())
-  usuario   Usuario @relation(fields: [usuarioId], references: [id_usuario])
-  usuarioId String  
-
-  data_compra     DateTime @default(now())
+  id_compra       String        @id @default(uuid())
+  usuarioId       String
+  data_compra     DateTime      @default(now())
   total           Decimal
   status          String
   forma_pagamento String
-
-  itemCompra Item_Compra[]
+  usuario         Usuario       @relation(fields: [usuarioId], references: [id_usuario])
+  itemCompra      Item_Compra[]
 }
 
 model Item_Compra {
-  id_item_compra Int    @id @default(autoincrement())
-  compra         Compra @relation(fields: [compraId], references: [id_compra])
-  compraId       String 
+  id_item_compra Int     @id @default(autoincrement())
+  compraId       String
+  produtoId      String
+  compra         Compra  @relation(fields: [compraId], references: [id_compra])
+  produto        Produto @relation(fields: [produtoId], references: [id_produto])
 
-  produto   Produto @relation(fields: [produtoId], references: [id_produto])
-  produtoId String 
-
-  @@unique([compraId,produtoId])
+  @@unique([compraId, produtoId])
 }
-
-// model teste {
-//   cpf String
-//   nome String
-
-//    @@id(name: "Teste",fields: [cpf,nome])
-// }

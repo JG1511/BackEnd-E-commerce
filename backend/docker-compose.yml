@@ -1,16 +1,16 @@
 services:
   db:
-    image: postgres
+    image: postgres:15-alpine
     container_name: db_pfc
     restart: always
     ports:
-      - 5432:5432
+      - "5433:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=pfc123
-      - POSTGRES_DB=pfc
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pfc123
+      POSTGRES_DB: pfc
     volumes:
-      - pgdata:/data/postgres
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
   pgdata:
