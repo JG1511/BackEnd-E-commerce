@@ -1,13 +1,12 @@
 import express from "express";
+import routerUser from "./routers/userRouter";
 
-const app : any = express()
+const app = express()
 
 app.use(express.json());
 
-
-app.get('/', (req : any,res : any) => {
-    res.json('Gorge o curioso')
-})
+// Aqui sinalizamos as rotas que o nosso app irá utilizar
+app.use(routerUser);
 
 app.listen(8080, () => {
     console.log('O servedor está rodando na porta 8080')
