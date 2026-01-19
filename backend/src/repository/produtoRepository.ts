@@ -1,4 +1,5 @@
 import { prisma } from "../db/db";
+import { Prisma } from "../generated/prisma/client";
 
 class ProdutoRepository {
     async findAll() {
@@ -19,7 +20,7 @@ class ProdutoRepository {
             data: {
                 nome: nome,
                 descricao: descricao,
-                preco: preco,
+                preco: new Prisma.Decimal(preco),
                 cor: cor,
                 modelo: modelo,
                 categoria: {
@@ -39,7 +40,7 @@ class ProdutoRepository {
             data: {
                 nome: nome,
                 descricao: descricao,
-                preco: preco,
+                preco: new Prisma.Decimal(preco),
                 cor: cor,
                 modelo: modelo,
                 categoria: {
