@@ -2,7 +2,7 @@ import UserServicer from "../services/userServicer"
 class UserController {
 
     async getUser(req: any, res: any) {
-        const userAll = await UserServicer.getUser()
+        const userAll = await UserServicer.getUser();
         res.status(200).json(userAll);
     }
 

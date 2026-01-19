@@ -20,6 +20,7 @@ class ProdutoRepository {
             data: {
                 nome: nome,
                 descricao: descricao,
+                //Converte o number em Decimal
                 preco: new Prisma.Decimal(preco),
                 cor: cor,
                 modelo: modelo,
@@ -49,7 +50,7 @@ class ProdutoRepository {
             }
         });
 
-        return result
+        return result;
     }
 
     async delete(id: string) {
