@@ -14,8 +14,8 @@ class UserController {
 
     async createUser(req: any, res: any) {
         const { nome, cpf, email, senha } = req.body;
-        const createUser = await UserServicer.createUser(nome, cpf, email, senha);
-        res.status(201).json(createUser);
+        const newUser = await UserServicer.createUser(nome, cpf, email, senha);
+        res.status(201).json(newUser);
     }
 
     async updateUser(req: any, res: any) {
