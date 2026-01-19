@@ -4,12 +4,12 @@ import { prisma } from '../db/db'
 class UserRepository {
 
     async findAll() {
-        const result: any = await prisma.usuario.findMany();
+        const result = await prisma.usuario.findMany();
         return result;
     }
 
     async findId(id: string) {
-        const result: any = await prisma.usuario.findUnique({
+        const result = await prisma.usuario.findUnique({
             where: {
                 id_usuario: id
             }
@@ -19,7 +19,7 @@ class UserRepository {
 
     async create(nome: string, cpf: string, email: string, senha: string) {
 
-        const newUser: any = await prisma.usuario.create({
+        const newUser = await prisma.usuario.create({
             data: {
                 nome: nome,
                 cpf: cpf,
@@ -32,7 +32,7 @@ class UserRepository {
     }
 
     async update(id: string, nome: string, cpf: string, email: string, senha: string) {
-        const updateUser: any = await prisma.usuario.update({
+        const updateUser = await prisma.usuario.update({
             where: {
                 id_usuario: id
             },
