@@ -21,7 +21,7 @@ model Usuario {
 
 model Produto {
   id_produto    String           @id @default(uuid())
-  nome          String
+  nome          String           @unique
   descricao     String
   preco         Decimal
   cor           String
@@ -36,7 +36,7 @@ model Produto {
 
 model Categoria {
   id_categoria  Int       @id @default(autoincrement())
-  nomeCategoria String
+  nomeCategoria String    @unique
   descricao     String
   produto       Produto[]
 }

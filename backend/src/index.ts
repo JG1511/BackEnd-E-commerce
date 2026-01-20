@@ -1,7 +1,9 @@
 import express from "express";
-import routerUser from "./routers/userRouter";
-import produtoRouter from "./routers/produtoRouter";
+
 import categoriaRouter from "./routers/categoriaRouter";
+import produtoRouter from "./routers/produtoRouter";
+import routerUser from "./routers/userRouter";
+import { runSeed } from "./db/seed";
 
 const app = express()
 
