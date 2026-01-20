@@ -26,7 +26,7 @@ class CategoriaServicer {
         }
     }
 
-    async deleteProduto(id: number) {
+    async deleteCategoria(id: number) {
         const categoriaExist = CategoriaRepository.findId(id);
         if (!categoriaExist) {
             throw new Error('está categoria não existe')
