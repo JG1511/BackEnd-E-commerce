@@ -31,9 +31,9 @@ class Carrinho {
         return await prisma.item_Carrinho.create({
             data: {
                 preco_unitario: new Prisma.Decimal(preco),
-                quantidade : quantidade,
-                carrinhoId : carrinhoId,
-                produtoId :produtoId
+                quantidade: quantidade,
+                carrinhoId: carrinhoId,
+                produtoId: produtoId
             }
         })
     }
@@ -49,6 +49,12 @@ class Carrinho {
                     }
                 }
             }
+        })
+    }
+
+    async existProduct(itemId: number) {
+        return await prisma.item_Carrinho.findUnique({
+            where: { id_item: itemId }
         })
     }
 }
