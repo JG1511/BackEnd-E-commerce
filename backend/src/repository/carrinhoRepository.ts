@@ -90,6 +90,8 @@ class Carrinho {
             }
         })
 
+        return result;
+
     }
 
     async deleteItem(itemId: number) {
@@ -98,3 +100,5 @@ class Carrinho {
         })
     }
 }
+
+export default new Carrinho();
