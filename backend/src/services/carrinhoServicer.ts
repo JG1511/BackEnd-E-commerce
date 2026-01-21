@@ -1,18 +1,32 @@
 import CarrinhoRepository from "../repository/carrinhoRepository";
+import ProdutoRepository from "../repository/produtoRepository";
 class CarrinhoServicer {
     async getCarrinho(userId: string) {
-        const row = CarrinhoRepository.findCart(userId);
+        const row = await CarrinhoRepository.findCart(userId);
         return row;
     }
 
     async createCarrinho(userId: string) {
-        const row = CarrinhoRepository.create(userId);
+        const row = await CarrinhoRepository.create(userId);
         return row;
     }
 
-    async addProdutoNoCarrinho(carrinhoId: string, produtoId: string, quantidade: number, preco: number) {
-        const row = CarrinhoRepository.addProductToCart(carrinhoId, produtoId, quantidade, preco);
-        return row;
+    async addProdutoNoCarrinho(userId : string, produtoId: string, quantidade: number) {
+        
+        // Buscar carrinho aberto
+        let carrinho = await CarrinhoRepository.findCart(userId)
+        // Criar se não existir
+        if(!carrinho){
+            carrinho = await CarrinhoRepository.create(userId)
+        }
+        // Busca o produto(ele não vem do front)
+        const produto = await ProdutoRepository.findId(produtoId)
+
+        if(!produtoId){
+            throw new Error('Produto não encontrado')
+        }
+
+        const row = await CarrinhoRepository.addProductToCart(carrinho.id_carrinho,produtoId,quantidade,produto?.preco)
     }
 
     async listProdutosNoCarrinho(carrinhoId: string) {

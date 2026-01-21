@@ -1,7 +1,7 @@
 import { prisma } from "../db/db";
 import { Prisma } from "../generated/prisma/client";
 
-class Carrinho {
+class CarrinhoRepository {
     async findCart(id_usuario: string) {
         const result = await prisma.carrinho.findFirst({
             where: {
@@ -25,6 +25,13 @@ class Carrinho {
             data: {
                 usuarioId: id_usuario,
                 status: 'ABERTO'
+            },
+            include: {
+                itemCarrinho :{
+                    include : {
+                        produto : true
+                    }
+                }
             }
         })
 
@@ -95,10 +102,10 @@ class Carrinho {
     }
 
     async deleteItem(itemId: number) {
-        const result = await prisma.item_Carrinho.delete({
+        await prisma.item_Carrinho.delete({
             where: { id_item: itemId }
         })
     }
 }
 
-export default new Carrinho();
+export default new CarrinhoRepository();
