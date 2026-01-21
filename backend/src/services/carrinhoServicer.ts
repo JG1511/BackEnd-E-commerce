@@ -38,3 +38,5 @@ class CarrinhoServicer {
         CarrinhoRepository.deleteItem(itemId);
     }
 }
+
+export default new CarrinhoServicer();
