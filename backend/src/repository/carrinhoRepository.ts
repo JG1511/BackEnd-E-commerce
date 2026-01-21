@@ -9,11 +9,15 @@ class Carrinho {
                 status: 'ABERTO'
             },
             include: {
-                itemCarrinho: true
+                itemCarrinho: {
+                    include: {
+                        produto: true
+                    }
+                }
             }
         })
 
-        return result
+        return result;
     }
 
     async create(id_usuario: string) {
@@ -24,22 +28,36 @@ class Carrinho {
             }
         })
 
-        return result
+        return result;
     }
 
     async addProductToCart(carrinhoId: string, produtoId: string, quantidade: number, preco: number) {
-        return await prisma.item_Carrinho.create({
-            data: {
-                preco_unitario: new Prisma.Decimal(preco),
-                quantidade: quantidade,
+        //upsert ele basicamente faz o papel do if e o else, neste caso ele vai verificar se já existe o produto no carrinho ou não.
+        const result = await prisma.item_Carrinho.upsert({
+            where: {
+                produtoId_carrinhoId: {
+                    produtoId,
+                    carrinhoId,
+                },
+            },
+            update: {
+                quantidade: {
+                    increment: quantidade
+                }
+            },
+            create: {
                 carrinhoId: carrinhoId,
-                produtoId: produtoId
+                produtoId: produtoId,
+                quantidade: quantidade,
+                preco_unitario: new Prisma.Decimal(preco)
             }
         })
+
+        return result;
     }
 
     async listProductsInCart(carrinhoId: string) {
-        return await prisma.carrinho.findUnique({
+        const result = await prisma.carrinho.findUnique({
             where: {
                 id_carrinho: carrinhoId
             }, include: {
@@ -50,10 +68,32 @@ class Carrinho {
                 }
             }
         })
+
+        return result;
     }
 
-    async existProduct(itemId: number) {
-        return await prisma.item_Carrinho.findUnique({
+    async findItemById(itemId: number) {
+        const result = await prisma.item_Carrinho.findUnique({
+            where: { id_item: itemId }
+        })
+
+        return result;
+    }
+
+    async incrementItemQuantity(itemId: number, quantidade: number) {
+        const result = await prisma.item_Carrinho.update({
+            where: { id_item: itemId },
+            data: {
+                quantidade: {
+                    increment: quantidade
+                }
+            }
+        })
+
+    }
+
+    async deleteItem(itemId: number) {
+        const result = await prisma.item_Carrinho.delete({
             where: { id_item: itemId }
         })
     }
