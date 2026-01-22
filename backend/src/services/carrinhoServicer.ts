@@ -1,3 +1,4 @@
+import { Prisma } from "../generated/prisma/client";
 import CarrinhoRepository from "../repository/carrinhoRepository";
 import ProdutoRepository from "../repository/produtoRepository";
 class CarrinhoServicer {
@@ -11,26 +12,37 @@ class CarrinhoServicer {
         return row;
     }
 
-    async addProdutoNoCarrinho(userId : string, produtoId: string, quantidade: number) {
-        
+    async addProdutoNoCarrinho(userId: string, produtoId: string, quantidade: number) {
+
         // Buscar carrinho aberto
-        let carrinho = await CarrinhoRepository.findCart(userId)
+        let carrinho = await CarrinhoRepository.findCart(userId);
         // Criar se não existir
-        if(!carrinho){
-            carrinho = await CarrinhoRepository.create(userId)
+        if (!carrinho) {
+            carrinho = await CarrinhoRepository.create(userId);
         }
         // Busca o produto(ele não vem do front)
-        const produto = await ProdutoRepository.findId(produtoId)
+        const produto = await ProdutoRepository.findId(produtoId);
 
-        if(!produtoId){
-            throw new Error('Produto não encontrado')
+        if (!produto) {
+            throw new Error('Produto não encontrado');
         }
 
-        const row = await CarrinhoRepository.addProductToCart(carrinho.id_carrinho,produtoId,quantidade,produto?.preco)
+        const preco = new Prisma.Decimal(produto.preco);
+
+        const row = await CarrinhoRepository.addProductToCart(carrinho.id_carrinho, produtoId, quantidade, preco)
+
+        return row;
     }
 
-    async listProdutosNoCarrinho(carrinhoId: string) {
-        const row = CarrinhoRepository.listProductsInCart(carrinhoId);
+    async listProdutosNoCarrinho(usuarioId: string) {
+        let carrinho = await CarrinhoRepository.findCart(usuarioId)
+
+        if (!carrinho) {
+            carrinho = await CarrinhoRepository.create(usuarioId);
+        }
+
+        const row = await CarrinhoRepository.listProductsInCart(carrinho.id_carrinho);
+
         return row;
     }
 
@@ -48,7 +60,7 @@ class CarrinhoServicer {
         }
     }
 
-    async deleteItem(itemId : number){
+    async deleteItem(itemId: number) {
         CarrinhoRepository.deleteItem(itemId);
     }
 }

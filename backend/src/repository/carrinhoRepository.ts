@@ -38,7 +38,7 @@ class CarrinhoRepository {
         return result;
     }
 
-    async addProductToCart(carrinhoId: string, produtoId: string, quantidade: number, preco: number) {
+    async addProductToCart(carrinhoId: string, produtoId: string, quantidade: number, preco: Prisma.Decimal) {
         //upsert ele basicamente faz o papel do if e o else, neste caso ele vai verificar se já existe o produto no carrinho ou não.
         const result = await prisma.item_Carrinho.upsert({
             where: {
