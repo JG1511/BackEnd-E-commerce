@@ -30,7 +30,9 @@ class ListaFavoritoRepository {
             include: {
                 produto: true
             }
-        })
+        });
+
+        return result;
     }
 
     async isFavorit(id_usuario: string, id_produto: string) {
