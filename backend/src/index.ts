@@ -23,4 +23,5 @@ app.listen(8080, () => {
 
 
 
-// id de teste : 59c522c2-ae75-46a5-9372-e111518ae74e
+// id de teste de usuário : 59c522c2-ae75-46a5-9372-e111518ae74e
+// id de teste de produto : 81219da5-8705-452c-b040-90ebd5214aa9
