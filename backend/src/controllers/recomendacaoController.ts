@@ -7,3 +7,5 @@ class RecomendacaoController{
         res.status(200).json(addRecomendacao)
     }
 }
+
+export default new RecomendacaoController()
