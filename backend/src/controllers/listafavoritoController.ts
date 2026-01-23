@@ -6,7 +6,7 @@ class ListaFavoritoController {
     async getListaFavorito(req: any, res: any) {
         const { userId } = req.params;
         const list = await ListafavoritoServicer.getListaFavorito(userId);
-        res.status(200).json(list, { message: 'Isso é apenas um debugu, retire depois JG' });
+        res.status(200).json(list);
     }
 
     async addProdutoListaFavorito(req: any, res: any) {
