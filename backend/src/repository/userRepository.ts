@@ -55,6 +55,18 @@ class UserRepository {
         })
     }
 
+    // Parte do Login e Logout
+
+    async login(email: string, senha: string) {
+        const result = await prisma.usuario.findFirst({
+            where: {
+                email: email,
+                senha: senha
+            }
+        });
+        return result;
+    }
+
 }
 
 export default new UserRepository()
