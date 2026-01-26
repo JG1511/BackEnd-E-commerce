@@ -33,13 +33,6 @@ class UserController {
 
     }
 
-    // Parte de Login e Logout
-
-    async login(req: any, res: any) {
-        const {email,senha} = req.body;
-        const loginUser = await UserServicer.login(email,senha);
-        res.status(200).json(loginUser, {message : 'Usuário logado com sucesso'});
-    }
 }
 
 export default new UserController();

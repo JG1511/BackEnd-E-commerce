@@ -1,6 +1,7 @@
 
 import { prisma } from "../db/db";
 import UserRepository from "../repository/userRepository"
+
 class UserServicer {
 
     async getUser() {
@@ -35,19 +36,6 @@ class UserServicer {
         await UserRepository.delete(id);
     }
 
-    // Parte para Login e Logout
-    async login(email: string, senha: string) {
-
-        const userLogin = await UserRepository.login(email, senha);
-
-        if (!userLogin) {
-            throw new Error('Usuário não existe');
-        } else {
-            return userLogin;
-        }
-
-        // const row = await UserRepository.login(email,senha);
-    }
 }
 
 export default new UserServicer()
