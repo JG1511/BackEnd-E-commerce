@@ -1,15 +1,7 @@
-import z, { email } from "zod";
 import AuthRepository from "../repository/authRepository";
 import jwt from "jsonwebtoken";
 import authConfig from "../config/auth.config";
-
-// Esquema que utiliza o zod para validação 
-const loginSchema = z.object({
-    email: z.string(),
-    senha: z.string().min(8, "Senha deve ter no mínimo 8 caracteres"),
-})
-// Criamos uma typagem para o TS
-type LoginDTO = z.infer<typeof loginSchema>
+import { LoginDTO } from "../config/validacao.config";
 
 
 class AuthServicer {
@@ -19,7 +11,7 @@ class AuthServicer {
 
             if (!login) {
                 throw new Error('Email ou senha Invalida');
-            }
+            };
 
             // Gera o token de acesso com o tempo para expirar
             const accesToken = jwt.sign(
@@ -33,9 +25,17 @@ class AuthServicer {
                 { userId: login.id_usuario },
                 authConfig.refresh_secret,
                 { expiresIn: authConfig.refresh_secret_expires_in as any }
-            )
+            );
 
-            return ([accesToken, refreshToken, login])
+            return {
+                accesToken : accesToken,
+                refreshToken : refreshToken,
+                data :{
+                    userid : login.id_usuario,
+                    nome : login.nome,
+                    email : login.email
+                }
+            }
 
 
         } catch (error) {
