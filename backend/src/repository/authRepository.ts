@@ -10,6 +10,10 @@ class AuthRepository {
         })
     }
 
+    async addRefrashToken(){
+        
+    }
+
     async logout() {
 
     }

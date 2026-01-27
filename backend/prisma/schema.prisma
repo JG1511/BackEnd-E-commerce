@@ -13,6 +13,7 @@ model Usuario {
   cpf           String           @unique
   email         String           @unique
   senha         String
+  refreshToken  String?
   carrinho      Carrinho[]
   compra        Compra[]
   listaFavorito Lista_Favorito[]
