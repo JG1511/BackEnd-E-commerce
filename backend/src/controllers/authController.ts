@@ -32,8 +32,15 @@ class AuthController {
 
         res.clearCookie("acessToken");
         res.clearCookie("refreshToken");
-        
+
         return res.status(200).json({ message: 'Usuário deslogado com sucesso' })
+    }
+
+    async refreshToken(req : any, res : any){
+        const {usuerId} = req.params;
+        const refreshToken = req.cookies.refreshToken;
+
+        await AuthServicer.refreshToken(usuerId,refreshToken);
     }
 }
 
