@@ -2,6 +2,7 @@ import AuthRepository from "../repository/authRepository";
 import jwt from "jsonwebtoken";
 import authConfig from "../config/auth.config";
 import { LoginDTO } from "../config/validacao.config";
+import UserRepository from "../repository/userRepository";
 
 
 class AuthServicer {
@@ -27,6 +28,8 @@ class AuthServicer {
                 { expiresIn: authConfig.refresh_secret_expires_in as any }
             );
 
+            await AuthRepository.addRefrashToken(email,refreshToken);
+
             return {
                 accesToken : accesToken,
                 refreshToken : refreshToken,
@@ -40,6 +43,14 @@ class AuthServicer {
 
         } catch (error) {
             throw new Error('Login Falhou');
+        }
+    }
+
+    async logout(userId : string){
+        const userExist =  await UserRepository.findId(userId);
+
+        if(userExist){
+            await AuthRepository.logout(userId);
         }
     }
 

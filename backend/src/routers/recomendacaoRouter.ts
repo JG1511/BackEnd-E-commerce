@@ -4,6 +4,6 @@ import RecomendacaoController from "../controllers/recomendacaoController";
 
 const recomendacaoRouter = Router();
 
-recomendacaoRouter.post('lista_de_recomendacao', RecomendacaoController.addListaRecomendacao)
+recomendacaoRouter.post('/lista_de_recomendacao', RecomendacaoController.addListaRecomendacao)
 
 export default recomendacaoRouter

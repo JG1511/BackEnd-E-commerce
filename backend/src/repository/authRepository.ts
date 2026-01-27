@@ -7,15 +7,25 @@ class AuthRepository {
                 email,
                 senha
             }
-        })
+        });
     }
 
-    async addRefrashToken(){
-        
+    async addRefrashToken(email: string, refreshToken: string) {
+        return await prisma.usuario.update({
+            where: { email },
+            data: {
+                refreshToken
+            }
+        });
     }
 
-    async logout() {
-
+    async logout(userId : string) {
+        return await prisma.usuario.update({
+            where : {id_usuario : userId},
+            data :{
+                refreshToken : null
+            }
+        });
     }
 }
 
