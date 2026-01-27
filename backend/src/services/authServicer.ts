@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import authConfig from "../config/auth.config";
 import { LoginDTO } from "../config/validacao.config";
 import UserRepository from "../repository/userRepository";
+import { tr } from "zod/v4/locales";
 
 
 class AuthServicer {
@@ -60,6 +61,33 @@ class AuthServicer {
             throw new Error('Logout felhou');
         }
 
+    }
+
+    async refreshToken(userId: string, refreshToken: string) {
+        try {
+            const userExist = await UserRepository.findId(userId);
+
+            // verifica só o refreshToken existe
+            if (!userExist || !userExist.refreshToken) throw new Error('Refresh token não encontrado');
+            // Ele compara o refreshToken do navegador com o do DB 
+            if (userExist.refreshToken !== refreshToken) throw new Error('O Refresh token é invalido');
+
+            const newAccesToken = jwt.sign(
+                { userId: userExist.id_usuario },
+                authConfig.secret,
+                { expiresIn: authConfig.secret_expires_in as any }
+            );
+
+            return {
+
+                newAccesToken: newAccesToken
+            };
+
+
+        } catch (error) {
+            console.error("Refresh Token falhou:", error);
+            return ('Refresh Token falhou');
+        }
     }
 
 }
