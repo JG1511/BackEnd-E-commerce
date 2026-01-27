@@ -26,11 +26,14 @@ class AuthController {
 
     }
 
-    async logout(req : any, res : any){
-        const {userId} = req.params;
+    async logout(req: any, res: any) {
+        const { userId } = req.params;
         await AuthServicer.logout(userId);
 
-        return res.status(200).json({message: 'Usuário deslogado com sucesso'})
+        res.clearCookie("acessToken");
+        res.clearCookie("refreshToken");
+        
+        return res.status(200).json({ message: 'Usuário deslogado com sucesso' })
     }
 }
 

@@ -28,15 +28,15 @@ class AuthServicer {
                 { expiresIn: authConfig.refresh_secret_expires_in as any }
             );
 
-            await AuthRepository.addRefrashToken(email,refreshToken);
+            await AuthRepository.addRefrashToken(email, refreshToken);
 
             return {
-                accesToken : accesToken,
-                refreshToken : refreshToken,
-                data :{
-                    userid : login.id_usuario,
-                    nome : login.nome,
-                    email : login.email
+                accesToken: accesToken,
+                refreshToken: refreshToken,
+                data: {
+                    userid: login.id_usuario,
+                    nome: login.nome,
+                    email: login.email
                 }
             }
 
@@ -46,12 +46,20 @@ class AuthServicer {
         }
     }
 
-    async logout(userId : string){
-        const userExist =  await UserRepository.findId(userId);
+    async logout(userId: string) {
 
-        if(userExist){
-            await AuthRepository.logout(userId);
+        try {
+            const userExist = await UserRepository.findId(userId);
+
+            if (userExist) {
+                await AuthRepository.logout(userId);
+            }
+
+        } catch (error) {
+            console.log('Logout falhou ', error);
+            throw new Error('Logout felhou');
         }
+
     }
 
 }
