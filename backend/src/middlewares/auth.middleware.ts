@@ -1,45 +1,51 @@
-import { NextFunction, Request, Response } from "express";
+import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import authConfig from "../config/auth.config";
 
 export interface DecodedToken {
-    userId: string;
+  userId: string;
 }
 
+export const authenticateUser: RequestHandler = (req, res, next) => {
+  const token = req.cookies.accessToken;
 
-class AuthMiddleware {
+  if (!token) {
+    res.status(401).json({ message: "Token não fornecido" });
+    return;
+  }
 
-    static authenticateUser = (req: Request, res: Response, next: NextFunction) => {
-        // Extrai o token do Http cookie, se não existir retorna um status 401
-        const token = req.cookies.accesToken;
-        if (!token) res.status(401);
+  try {
+    const decodedToken = jwt.verify(
+      token,
+      authConfig.secret
+    ) as DecodedToken;
 
-        try {
-            //Verifica se o token que está sendo usado é o secret lá do authconfig
-            const decodedToken = jwt.verify(token, authConfig.secret) as DecodedToken
-            // Se o token for valido, ele irá anexar as informção na requisição do objeto
-            (req as any).userId = decodedToken.userId;
-            next();
-        } catch (error) {
-            console.error('Autenticação Falhou:', error)
-            res.json({ message: 'Não tem token' })
-        }
-    };
+    (req as any).userId = decodedToken.userId;
+    next();
+  } catch (error) {
+    console.error("Autenticação falhou:", error);
+    res.status(401).json({ message: "Token inválido" });
+  }
+};
 
-    static refreshTokenValidation = (req: Request, res: Response, next: NextFunction) => {
-        const refreshToken = req.cookies.refreshToken;
-        if (!refreshToken) res.status(401);
+export const refreshTokenValidation: RequestHandler = (req, res, next) => {
+  const refreshToken = req.cookies.refreshToken;
 
-        try {
-            const decodedToken = jwt.verify(refreshToken, authConfig.refresh_secret) as { userId: string }
-            (req as any).userId = decodedToken.userId;
-            next();
-        } catch (error) {
-            console.error('Refresh token falhou na autenticação:', error);
-            res.json({message: 'Não tem Refresh token'});
-        }
-    }
+  if (!refreshToken) {
+    res.status(401).json({ message: "Refresh token não fornecido" });
+    return;
+  }
 
-}
+  try {
+    const decodedToken = jwt.verify(
+      refreshToken,
+      authConfig.refresh_secret
+    ) as DecodedToken;
 
-export default new AuthMiddleware();
+    (req as any).userId = decodedToken.userId;
+    next();
+  } catch (error) {
+    console.error("Refresh token inválido:", error);
+    res.status(401).json({ message: "Refresh token inválido" });
+  }
+};

@@ -19,14 +19,14 @@ class AuthServicer {
             const accesToken = jwt.sign(
                 { userId: login.id_usuario },
                 authConfig.secret,
-                { expiresIn: authConfig.secret_expires_in as any }
+                { expiresIn: Number(authConfig.secret_expires_in) }
             );
 
             // Gera o token de acesso e também dar um refrash
             const refreshToken = jwt.sign(
                 { userId: login.id_usuario },
                 authConfig.refresh_secret,
-                { expiresIn: authConfig.refresh_secret_expires_in as any }
+                { expiresIn: Number(authConfig.refresh_secret_expires_in) }
             );
 
             await AuthRepository.addRefrashToken(email, refreshToken);

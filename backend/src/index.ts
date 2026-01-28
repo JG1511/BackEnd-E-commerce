@@ -7,6 +7,7 @@ import carrinhoRouter from "./routers/carrinhoRouter";
 import listaFavoritoRouter from "./routers/listafavoritoRouter";
 import recomendacaoRouter from "./routers/recomendacaoRouter";
 import { runSeed } from "./db/seed";
+import authRouter from "./routers/authRouter";
 
 
 const app = express()
@@ -20,6 +21,7 @@ app.use(categoriaRouter);
 app.use(carrinhoRouter);
 app.use(listaFavoritoRouter);
 app.use(recomendacaoRouter);
+app.use(authRouter);
 
 app.listen(8080, () => {
     console.log('O servedor está rodando na porta 8080')
