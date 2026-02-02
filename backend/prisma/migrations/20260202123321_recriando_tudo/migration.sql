@@ -5,6 +5,7 @@ CREATE TABLE "Usuario" (
     "cpf" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "senha" TEXT NOT NULL,
+    "refreshToken" TEXT,
 
     CONSTRAINT "Usuario_pkey" PRIMARY KEY ("id_usuario")
 );
@@ -98,6 +99,12 @@ CREATE UNIQUE INDEX "Usuario_cpf_key" ON "Usuario"("cpf");
 CREATE UNIQUE INDEX "Usuario_email_key" ON "Usuario"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Produto_nome_key" ON "Produto"("nome");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Categoria_nomeCategoria_key" ON "Categoria"("nomeCategoria");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Recomendacao_produtoId_usuarioId_key" ON "Recomendacao"("produtoId", "usuarioId");
 
 -- CreateIndex
@@ -113,25 +120,25 @@ CREATE UNIQUE INDEX "Item_Compra_compraId_produtoId_key" ON "Item_Compra"("compr
 ALTER TABLE "Produto" ADD CONSTRAINT "Produto_categoriaID_fkey" FOREIGN KEY ("categoriaID") REFERENCES "Categoria"("id_categoria") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Recomendacao" ADD CONSTRAINT "Recomendacao_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario"("id_usuario") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Recomendacao" ADD CONSTRAINT "Recomendacao_produtoId_fkey" FOREIGN KEY ("produtoId") REFERENCES "Produto"("id_produto") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Lista_Favorito" ADD CONSTRAINT "Lista_Favorito_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario"("id_usuario") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Recomendacao" ADD CONSTRAINT "Recomendacao_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario"("id_usuario") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Lista_Favorito" ADD CONSTRAINT "Lista_Favorito_produtoId_fkey" FOREIGN KEY ("produtoId") REFERENCES "Produto"("id_produto") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Lista_Favorito" ADD CONSTRAINT "Lista_Favorito_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario"("id_usuario") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Carrinho" ADD CONSTRAINT "Carrinho_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario"("id_usuario") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Item_Carrinho" ADD CONSTRAINT "Item_Carrinho_produtoId_fkey" FOREIGN KEY ("produtoId") REFERENCES "Produto"("id_produto") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Item_Carrinho" ADD CONSTRAINT "Item_Carrinho_carrinhoId_fkey" FOREIGN KEY ("carrinhoId") REFERENCES "Carrinho"("id_carrinho") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Item_Carrinho" ADD CONSTRAINT "Item_Carrinho_carrinhoId_fkey" FOREIGN KEY ("carrinhoId") REFERENCES "Carrinho"("id_carrinho") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Item_Carrinho" ADD CONSTRAINT "Item_Carrinho_produtoId_fkey" FOREIGN KEY ("produtoId") REFERENCES "Produto"("id_produto") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Compra" ADD CONSTRAINT "Compra_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario"("id_usuario") ON DELETE RESTRICT ON UPDATE CASCADE;

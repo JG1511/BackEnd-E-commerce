@@ -8,6 +8,7 @@ import listaFavoritoRouter from "./routers/listafavoritoRouter";
 import recomendacaoRouter from "./routers/recomendacaoRouter";
 
 import authRouter from "./routers/authRouter";
+import { runSeed } from "./db/seed";
 
 
 const app = express()
@@ -25,7 +26,7 @@ app.use(authRouter);
 
 app.listen(8080, () => {
     console.log('O servidor está rodando na porta 8080')
-    // runSeed()
+//    runSeed()
 })
 
 
